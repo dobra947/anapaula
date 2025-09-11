@@ -1,0 +1,247 @@
+---
+import { Icon } from "astro-icon/components";
+export interface Props {
+  name: string;
+  claim: string;
+  ctaText?: string;
+  ctaUrl?: string;
+}
+
+const { name, claim, ctaText = "Ver obras", ctaUrl = "/obras" } = Astro.props;
+---
+
+<section class="hero" aria-labelledby="hero-title">
+  <div class="hero-content">
+    <h1 id="hero-title" class="hero-name">{name}</h1>
+    <p class="hero-claim">{claim}</p>
+    <div class="hero-actions">
+      <a href={ctaUrl} class="cta-button">{ctaText}</a>
+      <div class="social-links">
+        <a href="https://instagram.com/anapaula_barahona" aria-label="Seguir en Instagram" class="social-link" target="_blank" rel="noopener">
+          <Icon name="tabler:brand-instagram" width="28" />
+        </a>
+        <a href="https://youtube.com/@anapaula_barahona" aria-label="Ver videos en YouTube" class="social-link" target="_blank" rel="noopener">
+          <Icon name="tabler:brand-youtube" width="28" />
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="hero-visual" aria-hidden="true">
+    <div class="sketch-line sketch-line-1"></div>
+    <div class="sketch-line sketch-line-2"></div>
+    <div class="sketch-line sketch-line-3"></div>
+  </div>
+</section>
+
+<style>
+  @font-face {
+    font-family: 'Handodle';
+    src: local('Handodle'),
+         url('/fonts/Handodle.woff2') format('woff2');
+    font-weight: 400 800;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  .hero {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: var(--space-8);
+    align-items: center;
+    min-height: 60vh;
+    padding: var(--space-6) 0;
+    position: relative;
+  }
+
+  .hero-content {
+    max-width: 600px;
+  }
+
+  .hero-name {
+    font-family: 'Handodle', var(--font-family-display), system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    font-size: clamp(5rem, 8vw, 10rem);
+    font-weight: 600;
+    margin: 0 0 var(--space-3) 0;
+    line-height: 1.1;
+    position: relative;
+  }
+
+  .hero-name::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 60%;
+    height: 3px;
+    background: var(--color-black);
+    transform: scaleX(0);
+    animation: drawLine 1s ease-out 0.5s forwards;
+    transform-origin: left;
+  }
+
+  .hero-claim {
+    font-size: 1.25rem;
+    color: var(--color-gray);
+    margin: 0 0 var(--space-6) 0;
+    line-height: 1.4;
+  }
+
+  .hero-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+  }
+
+  .cta-button {
+    display: inline-block;
+    padding: var(--space-2) var(--space-4);
+    background: var(--color-black);
+    color: var(--color-white);
+    text-decoration: none;
+    border-radius: var(--border-radius);
+    transition: var(--transition);
+    font-weight: 500;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+  }
+
+  .cta-button:hover::before {
+    left: 100%;
+  }
+
+  .cta-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  }
+
+  .social-links {
+    display: flex;
+    gap: var(--space-2);
+  }
+
+  .social-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--color-black);
+    border-radius: 50%;
+    text-decoration: none;
+    color: var(--color-black);
+    transition: var(--transition);
+    font-size: 1.2rem;
+  }
+
+  .social-link:hover {
+    background: var(--color-black);
+    color: var(--color-white);
+    transform: scale(1.1);
+  }
+
+  .hero-visual {
+    width: 200px;
+    height: 200px;
+    position: relative;
+  }
+
+  .sketch-line {
+    position: absolute;
+    background: var(--color-black);
+    opacity: 0.6;
+  }
+
+  .sketch-line-1 {
+    width: 120px;
+    height: 2px;
+    top: 30%;
+    left: 10%;
+    transform: rotate(-15deg);
+    animation: drawSketch 2s ease-out 1s forwards;
+  }
+
+  .sketch-line-2 {
+    width: 80px;
+    height: 2px;
+    top: 50%;
+    left: 40%;
+    transform: rotate(20deg);
+    animation: drawSketch 2s ease-out 1.3s forwards;
+  }
+
+  .sketch-line-3 {
+    width: 100px;
+    height: 2px;
+    top: 70%;
+    left: 20%;
+    transform: rotate(-8deg);
+    animation: drawSketch 2s ease-out 1.6s forwards;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  @keyframes drawLine {
+    to {
+      transform: scaleX(1);
+    }
+  }
+
+  @keyframes drawSketch {
+    from { transform: scaleX(0); }
+    to   { transform: scaleX(1); }
+  }
+
+  @media (max-width: 768px) {
+    .hero {
+      grid-template-columns: 1fr;
+      gap: var(--space-6);
+      text-align: center;
+    }
+
+    .hero-visual {
+      margin: 0 auto;
+    }
+
+    .hero-actions {
+      justify-content: center;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-name::after,
+    .sketch-line {
+      animation: none;
+      transform: scaleX(1);
+    }
+
+    .cta-button:hover {
+      transform: none;
+    }
+
+    .social-link:hover {
+      transform: none;
+    }
+  }
+</style>

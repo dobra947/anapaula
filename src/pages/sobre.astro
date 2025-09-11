@@ -1,0 +1,477 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PencilDivider from '../components/PencilDivider.astro';
+
+// JSON-LD para la página sobre mí
+const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    "mainEntity": {
+        "@type": "Person",
+        "name": "Ana Paula Barahona",
+        "description": "Artista visual apasionada por el dibujo y las técnicas tradicionales. Explorando la expresión artística a través del trazo.",
+        "url": "https://anapaulabarahona.com",
+        "sameAs": [
+            "https://instagram.com/anapaula_barahona",
+            "https://youtube.com/@anapaula_barahona"
+        ]
+    }
+};
+---
+
+<BaseLayout
+        title="Sobre mí - Ana Paula Barahona"
+        description="Conoce a Ana Paula Barahona, artista visual apasionada por las técnicas tradicionales de dibujo. Explorando la expresión a través del arte."
+        canonical="https://anapaulabarahona.com/sobre"
+        jsonLd={jsonLd}
+>
+    <nav aria-label="Navegación de migas" class="breadcrumb">
+        <ol>
+            <li><a href="/">Inicio</a></li>
+            <li aria-current="page">Sobre mí</li>
+        </ol>
+    </nav>
+
+    <article class="about-page">
+        <header class="page-header">
+            <h1>¡Hola! Soy Ana Paula</h1>
+            <p class="page-subtitle">¡La aventura detrás de cada trazo loco!</p>
+        </header>
+
+        <section class="hero-about">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h2>Pues esta soy yo</h2>
+                    <p class="intro-text">Artísta entre otras cosas, aunque creo que lo de artísta se me queda grande,
+                        pues me defino mas como persona creativa que utiliza las manos para hacer cosas muy bonitas.
+                        Pegada al ordenador o a mi mesa de trabajo, haciendo dibujinchis, diseñando cosas, esculpiendo
+                        figuricas o haciendo un mural en un dormitorio. </p>
+                </div>
+                <div class="hero-image">
+                    <figure class="portrait-figure">
+                        <img
+                                src="/images/anapaula_barahona.jpg"
+                                alt="Retrato en blanco y negro de Ana Paula Barahona en su estudio de arte"
+                                class="portrait-image"
+                                width="400"
+                                height="400"
+                        />
+                        <div class="portrait-frame" aria-hidden="true"></div>
+                    </figure>
+                </div>
+            </div>
+        </section>
+
+        <PencilDivider variant="sketch" size="lg"/>
+
+        <section class="journey-section" aria-labelledby="journey-title">
+            <h2 id="journey-title">¡Mi aventura artística!</h2>
+            <div class="journey-content">
+                <div class="journey-text">
+                    <p>
+                        ¡Todo comenzó cuando era pequeñica! Un día descubrí que un simple lápiz podía transportarme
+                        a mundos fantásticos que solo existían en mi imaginación, quedando ensimismada en mi cabeza
+                        mientras mis manos iban haciendo cosas solas.
+                        Desde entonces, no he podido dejar de construir cosas, pues también si quieres te hago unos
+                        zapatos...
+                    </p>
+                    <p>
+                        He probado MIL técnicas diferentes (¡algunas con resultados desastrosos, ja!) pero he aprendido
+                        que cada una tiene su magia.
+                    </p>
+                    <p>
+                        Para mí, cada obra es una pequeña fiesta donde invito a la técnica y la emoción a bailar juntas.
+                        A veces se pelean un poco, pero al final siempre acaban creando algo que me hace sonreír.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <PencilDivider variant="dots"/>
+
+        <section class="skills-section" aria-labelledby="skills-title">
+            <h2 id="skills-title">¡Mi caja de juguetes creativos!</h2>
+            <div class="skills-grid">
+                <div class="skill-card">
+                    <h3>Arcillas (polimericas o blanca)</h3>
+                    <p>¡Mi aliada número uno! Esto aqui esto allá.. ahora me cargo un brazo ahora lo pego, ahora no me
+                        gusta, ahora lo reempiezo... Y asi puedo tirarme horas.</p>
+                </div>
+                <div class="skill-card">
+                    <h3>Carboncillo y plumillas</h3>
+                    <p>Perfecto para cuando quiero obsesionarme con cada detallito y crear tonos que van desde el blanco
+                        más puro hasta el negro más intenso. ¡Aunque siempre acabo con las manos como si hubiera estado
+                        excavando en una mina!</p>
+                </div>
+                <div class="skill-card">
+                    <h3>Acrílicos con espátula</h3>
+                    <p>Para cuando tengo días que quiero hacerme la Pollock. Tiro de nervios y saco todo mi estres.</p>
+                </div>
+                <div class="skill-card">
+                    <h3>Técnicas mixtas</h3>
+                    <p>¡Para cuando no puedo decidirme! Mezclo todo lo que tengo por casa y dejo que el caos creativo
+                        haga su magia. ¡Las mejores sorpresas siempre vienen de aquí!</p>
+                </div>
+            </div>
+        </section>
+
+        <PencilDivider variant="line"/>
+
+        <section class="philosophy-section" aria-labelledby="philosophy-title">
+            <h2 id="philosophy-title">¡Mi manifiesto creativo!</h2>
+            <blockquote class="philosophy-quote">
+                <p>
+                    "El arte no está en lo que ves, sino en la fiesta de emociones que genera lo que ves en tu cerebro"
+                </p>
+                <cite>Yo misma, con mi carisma</cite>
+            </blockquote>
+
+        </section>
+
+        <PencilDivider variant="sketch"/>
+
+        <section class="inspiration-section" aria-labelledby="inspiration-title">
+            <h2 id="inspiration-title">¿De dónde saco las ideas?</h2>
+            <div class="inspiration-content">
+                <p>
+                    Pues todavía no lo sé, solo ∫que me inspiro en todo lo que me rodea, desde una necesidad que me
+                    viene a la cabeza, hasta una canción que me pone los pelos de punta.
+                </p>
+                <p>
+                    Tengo muchos crush artísticos y no quiero elegir a uno, y no quiero liarme a nombrar a artistas
+                    porque seguro que me dejo a alguien y me da cosa, bueno a mi hermana of course, Amaya Barahona, que
+                    os dejo aqui su web:
+                    <a href="https://amayabarahona.com" class="about-link">SU WEB</a>
+                    Es una artista increíble y hace cosas preciosas.
+                    Pero si te interesa, en mi Instagram suelo compartir a menudo artistas que me inspiran.
+                </p>
+            </div>
+        </section>
+
+        <section class="connect-cta">
+            <h2>¿Quieres ver más?</h2>
+            <p>Si te gusta lo que ves y quieres ser parte de mi mundo artístico lleno de trazos locos y experimentos
+                divertidos, ¡sígueme en redes!</p>
+            <a href="/contacto" class="cta-button">¡Sígueme!</a>
+        </section>
+    </article>
+</BaseLayout>
+
+<style>
+    .breadcrumb {
+        margin-bottom: var(--space-4);
+    }
+
+    .breadcrumb ol {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        gap: var(--space-1);
+        font-size: 0.9rem;
+    }
+
+    .breadcrumb li::after {
+        content: ' / ';
+        color: var(--color-gray);
+        margin-left: var(--space-1);
+    }
+
+    .breadcrumb li:last-child::after {
+        display: none;
+    }
+
+    .breadcrumb a {
+        color: var(--color-black);
+        text-decoration: none;
+    }
+
+    .breadcrumb a:hover {
+        text-decoration: underline;
+    }
+
+    .breadcrumb li[aria-current="page"] {
+        color: var(--color-gray);
+    }
+
+    .page-header {
+        text-align: center;
+        margin-bottom: var(--space-8);
+    }
+
+    .page-header h1 {
+        font-family: var(--font-family-display);
+        font-size: 3rem;
+        margin: 0 0 var(--space-2) 0;
+        position: relative;
+    }
+
+    .page-header h1::after {
+        content: '';
+        position: absolute;
+        bottom: -8px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100px;
+        height: 3px;
+        background: var(--color-black);
+    }
+
+    .page-subtitle {
+        font-size: 1.2rem;
+        color: var(--color-gray);
+        font-style: italic;
+        margin: 0;
+    }
+
+    .about-link {
+        display: block;
+        width: 100%;
+        text-align: center;
+        margin-top: var(--space-2);
+        margin-bottom: var(--space-2);
+        color: var(--color-black);
+        text-decoration: none;
+        font-weight: 500;
+        border-bottom: 2px solid transparent;
+        transition: var(--transition);
+    }
+
+    .about-link:hover {
+        border-bottom-color: var(--color-black);
+    }
+
+    .hero-about {
+        margin-bottom: var(--space-10);
+    }
+
+    .hero-content {
+        display: grid;
+        grid-template-columns: 1fr 400px;
+        gap: var(--space-8);
+        align-items: center;
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+
+    .hero-text h2 {
+        font-family: var(--font-family-display);
+        font-size: 2.2rem;
+        margin: 0 0 var(--space-4) 0;
+        color: var(--color-black);
+    }
+
+    .intro-text {
+        font-size: 1.2rem;
+        line-height: 1.6;
+        color: var(--color-gray);
+        margin: 0;
+    }
+
+    .portrait-figure {
+        position: relative;
+        margin: 0;
+    }
+
+    .portrait-image {
+        width: 100%;
+        height: auto;
+        border-radius: 50%;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+        transition: var(--transition);
+        filter: grayscale(100%);
+    }
+
+    .portrait-image:hover {
+        transform: scale(1.05);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    .portrait-frame {
+        position: absolute;
+        top: -10px;
+        left: -10px;
+        right: -10px;
+        bottom: -10px;
+        border: 2px solid var(--color-black);
+        border-radius: 50%;
+        opacity: 0.3;
+        transform: rotate(-5deg);
+    }
+
+    .journey-section,
+    .philosophy-section,
+    .inspiration-section {
+        margin: var(--space-10) 0;
+        max-width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .journey-section h2,
+    .philosophy-section h2,
+    .skills-section h2,
+    .inspiration-section h2 {
+        font-family: var(--font-family-display);
+        font-size: 2rem;
+        text-align: center;
+        margin: 0 0 var(--space-6) 0;
+        position: relative;
+    }
+
+    .journey-section h2::after,
+    .philosophy-section h2::after,
+    .skills-section h2::after,
+    .inspiration-section h2::after {
+        content: '';
+        position: absolute;
+        bottom: -8px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 2px;
+        background: var(--color-black);
+    }
+
+    .journey-text p,
+    .philosophy-text p,
+    .inspiration-content p {
+        font-size: 1.1rem;
+        line-height: 1.7;
+        margin: 0 0 var(--space-4) 0;
+        color: var(--color-gray);
+    }
+
+    .skills-section {
+        margin: var(--space-10) 0;
+    }
+
+    .skills-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: var(--space-4);
+        margin-top: var(--space-6);
+    }
+
+    .skill-card {
+        background: var(--color-white);
+        border: 1px solid #e0e0e0;
+        border-radius: var(--border-radius);
+        padding: var(--space-4);
+        transition: var(--transition);
+    }
+
+    .skill-card:hover {
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        transform: translateY(-2px);
+    }
+
+    .skill-card h3 {
+        font-family: var(--font-family-display);
+        font-size: 1.3rem;
+        margin: 0 0 var(--space-2) 0;
+        color: var(--color-black);
+    }
+
+    .skill-card p {
+        font-size: 0.95rem;
+        line-height: 1.5;
+        color: var(--color-gray);
+        margin: 0;
+    }
+
+    .philosophy-quote {
+        background: var(--color-gray-light);
+        padding: var(--space-6);
+        border-radius: var(--border-radius);
+        margin: 0 0 var(--space-6) 0;
+        text-align: center;
+        border-left: 4px solid var(--color-black);
+    }
+
+    .philosophy-quote p {
+        font-size: 1.3rem;
+        line-height: 1.6;
+        margin: 0 0 var(--space-3) 0;
+        font-style: italic;
+        color: var(--color-black);
+    }
+
+    .philosophy-quote cite {
+        font-size: 1rem;
+        color: var(--color-gray);
+        font-style: normal;
+    }
+
+    .inspiration-content {
+        background: var(--color-gray-light);
+        padding: var(--space-6);
+        border-radius: var(--border-radius);
+    }
+
+    .connect-cta {
+        text-align: center;
+        background: var(--color-gray-light);
+        padding: var(--space-6);
+        border-radius: var(--border-radius);
+        margin: var(--space-10) 0;
+    }
+
+    .connect-cta h2 {
+        font-family: var(--font-family-display);
+        font-size: 1.8rem;
+        margin: 0 0 var(--space-2) 0;
+    }
+
+    .connect-cta p {
+        margin: 0 0 var(--space-4) 0;
+        color: var(--color-gray);
+    }
+
+    .cta-button {
+        display: inline-block;
+        padding: var(--space-2) var(--space-4);
+        background: var(--color-black);
+        color: var(--color-white);
+        text-decoration: none;
+        border-radius: var(--border-radius);
+        transition: var(--transition);
+        font-weight: 500;
+    }
+
+    .cta-button:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    @media (max-width: 768px) {
+        .page-header h1 {
+            font-size: 2.5rem;
+        }
+
+        .hero-content {
+            grid-template-columns: 1fr;
+            gap: var(--space-6);
+            text-align: center;
+        }
+
+        .hero-text h2 {
+            font-size: 2rem;
+        }
+
+        .skills-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .portrait-image:hover,
+        .skill-card:hover {
+            transform: none;
+        }
+
+        .cta-button:hover {
+            transform: none;
+        }
+    }
+</style>

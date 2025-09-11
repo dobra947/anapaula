@@ -1,0 +1,301 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PencilDivider from '../components/PencilDivider.astro';
+
+// JSON-LD para la página de contacto
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ContactPage",
+  "mainEntity": {
+    "@type": "Person",
+    "name": "Ana Paula Barahona",
+    "jobTitle": "Artista Visual",
+    "url": "https://anapaulabarahona.com",
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "contactType": "customer service",
+      "availableLanguage": ["Spanish", "English"]
+    }
+  }
+};
+---
+
+<BaseLayout
+  title="Contacto - Ana Paula Barahona"
+  description="Conecta con Ana Paula Barahona a través de sus redes sociales. Descubre más sobre su trabajo artístico."
+  canonical="https://anapaulabarahona.com/contacto"
+  jsonLd={jsonLd}
+>
+  <nav aria-label="Navegación de migas" class="breadcrumb">
+    <ol>
+      <li><a href="/">Inicio</a></li>
+      <li aria-current="page">Contacto</li>
+    </ol>
+  </nav>
+
+  <article class="contact-page">
+    <header class="page-header">
+      <h1>Contacto</h1>
+      <p class="page-subtitle">Conectemos</p>
+    </header>
+
+    <section class="contact-intro">
+      <div class="intro-content">
+        <h2>Encantada de conocerte</h2>
+        <p>
+          Mi arte es mi forma de expresión y me encanta compartirlo con el mundo.
+          Si deseas seguir mi trabajo y estar al día con mis nuevas creaciones,
+          puedes encontrarme en mis redes sociales.
+        </p>
+      </div>
+    </section>
+
+    <PencilDivider variant="sketch" />
+
+    <section class="contact-methods" aria-labelledby="methods-title">
+      <h2 id="methods-title">Mis redes sociales</h2>
+
+      <div class="methods-grid">
+        <div class="contact-card">
+          <div class="contact-icon" aria-hidden="true">📷</div>
+          <h3>Instagram</h3>
+          <p>Sígueme para ver mi proceso creativo y obras en progreso.</p>
+          <a href="https://instagram.com/anapaula_barahona" class="contact-link" target="_blank" rel="noopener">
+            @anapaula_barahona
+          </a>
+        </div>
+
+        <div class="contact-card">
+          <div class="contact-icon" aria-hidden="true">🎬</div>
+          <h3>YouTube</h3>
+          <p>Mira los vídeos de mi proceso creativo y tutoriales.</p>
+          <a href="https://youtube.com/@anapaula_barahona" class="contact-link" target="_blank" rel="noopener">
+            @anapaula_barahona
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <PencilDivider variant="dots" />
+
+    <section class="message-section">
+      <div class="message-content">
+        <h2>¿Por qué el arte?</h2>
+        <p>
+          Para mí, el arte es una forma de comunicación que trasciende las palabras. A través
+          de mis dibujos, intento capturar la esencia de lo que veo y siento, compartiendo mi
+          perspectiva única del mundo.
+        </p>
+        <p>
+          Estoy feliz de que hayas llegado hasta aquí y espero que mi trabajo resuene contigo.
+          Sígueme en redes sociales para acompañarme en este viaje artístico.
+        </p>
+      </div>
+    </section>
+  </article>
+</BaseLayout>
+
+<style>
+  .breadcrumb {
+    margin-bottom: var(--space-4);
+  }
+
+  .breadcrumb ol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: var(--space-1);
+    font-size: 0.9rem;
+  }
+
+  .breadcrumb li::after {
+    content: ' / ';
+    color: var(--color-gray);
+    margin-left: var(--space-1);
+  }
+
+  .breadcrumb li:last-child::after {
+    display: none;
+  }
+
+  .breadcrumb a {
+    color: var(--color-black);
+    text-decoration: none;
+  }
+
+  .breadcrumb a:hover {
+    text-decoration: underline;
+  }
+
+  .breadcrumb li[aria-current="page"] {
+    color: var(--color-gray);
+  }
+
+  .page-header {
+    text-align: center;
+    margin-bottom: var(--space-8);
+  }
+
+  .page-header h1 {
+    font-family: var(--font-family-display);
+    font-size: 3rem;
+    margin: 0 0 var(--space-2) 0;
+    position: relative;
+  }
+
+  .page-header h1::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 3px;
+    background: var(--color-black);
+  }
+
+  .page-subtitle {
+    font-size: 1.2rem;
+    color: var(--color-gray);
+    font-style: italic;
+    margin: 0;
+  }
+
+  .contact-intro {
+    max-width: 700px;
+    margin: 0 auto var(--space-8) auto;
+    text-align: center;
+  }
+
+  .intro-content h2 {
+    font-family: var(--font-family-display);
+    font-size: 1.8rem;
+    margin: 0 0 var(--space-3) 0;
+  }
+
+  .intro-content p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: var(--color-gray);
+    margin: 0;
+  }
+
+  .contact-methods h2,
+  .message-section h2 {
+    font-family: var(--font-family-display);
+    font-size: 2rem;
+    text-align: center;
+    margin: 0 0 var(--space-6) 0;
+    position: relative;
+  }
+
+  .contact-methods h2::after,
+  .message-section h2::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 2px;
+    background: var(--color-black);
+  }
+
+  .methods-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--space-4);
+    margin-bottom: var(--space-10);
+  }
+
+  .contact-card {
+    background: var(--color-white);
+    border: 1px solid #e0e0e0;
+    border-radius: var(--border-radius);
+    padding: var(--space-5);
+    text-align: center;
+    transition: var(--transition);
+  }
+
+  .contact-card:hover {
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    transform: translateY(-2px);
+  }
+
+  .contact-icon {
+    font-size: 2rem;
+    margin-bottom: var(--space-2);
+  }
+
+  .contact-card h3 {
+    font-family: var(--font-family-display);
+    font-size: 1.3rem;
+    margin: 0 0 var(--space-2) 0;
+  }
+
+  .contact-card p {
+    color: var(--color-gray);
+    margin: 0 0 var(--space-3) 0;
+    line-height: 1.5;
+  }
+
+  .contact-link {
+    display: inline-block;
+    color: var(--color-black);
+    text-decoration: none;
+    font-weight: 600;
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--border-radius);
+    transition: var(--transition);
+  }
+
+  .contact-link:hover {
+    background: var(--color-black);
+    color: var(--color-white);
+  }
+
+  .message-section {
+    margin: var(--space-10) 0;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .message-content {
+    background: var(--color-gray-light);
+    padding: var(--space-6);
+    border-radius: var(--border-radius);
+    text-align: center;
+  }
+
+  .message-content p {
+    margin: 0 0 var(--space-3) 0;
+    line-height: 1.6;
+    color: var(--color-gray);
+  }
+
+  .message-content p:last-child {
+    margin-bottom: 0;
+  }
+
+  @media (max-width: 768px) {
+    .page-header h1 {
+      font-size: 2.5rem;
+    }
+
+    .methods-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .contact-card:hover {
+      transform: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .contact-card:hover {
+      transform: none;
+    }
+  }
+</style>

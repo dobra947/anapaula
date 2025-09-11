@@ -1,0 +1,201 @@
+---
+export interface Props {
+  variant?: 'line' | 'dots' | 'sketch';
+  size?: 'sm' | 'md' | 'lg';
+}
+
+const { variant = 'line', size = 'md' } = Astro.props;
+---
+
+<div class={`pencil-divider pencil-divider--${variant} pencil-divider--${size}`} aria-hidden="true">
+  {variant === 'line' && <div class="divider-line"></div>}
+  {variant === 'dots' && (
+    <div class="divider-dots">
+      <span class="dot"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
+    </div>
+  )}
+  {variant === 'sketch' && (
+    <div class="divider-sketch">
+      <div class="sketch-stroke sketch-stroke-1"></div>
+      <div class="sketch-stroke sketch-stroke-2"></div>
+      <div class="sketch-stroke sketch-stroke-3"></div>
+    </div>
+  )}
+</div>
+
+<style>
+  .pencil-divider {
+    margin: var(--space-6) auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .pencil-divider--sm {
+    margin: var(--space-4) auto;
+  }
+
+  .pencil-divider--lg {
+    margin: var(--space-8) auto;
+  }
+
+  /* Line variant */
+  .divider-line {
+    width: 100px;
+    height: 2px;
+    background: var(--color-black);
+    position: relative;
+    opacity: 0.6;
+  }
+
+  .divider-line::before,
+  .divider-line::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 2px;
+    background: var(--color-black);
+    top: 0;
+  }
+
+  .divider-line::before {
+    left: -30px;
+    transform: rotate(-15deg);
+  }
+
+  .divider-line::after {
+    right: -30px;
+    transform: rotate(15deg);
+  }
+
+  .pencil-divider--sm .divider-line {
+    width: 60px;
+  }
+
+  .pencil-divider--lg .divider-line {
+    width: 140px;
+  }
+
+  /* Dots variant */
+  .divider-dots {
+    display: flex;
+    gap: var(--space-2);
+  }
+
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--color-black);
+    opacity: 0.6;
+    animation: dotPulse 2s infinite;
+  }
+
+  .dot:nth-child(2) {
+    animation-delay: 0.3s;
+  }
+
+  .dot:nth-child(3) {
+    animation-delay: 0.6s;
+  }
+
+  .pencil-divider--sm .dot {
+    width: 6px;
+    height: 6px;
+  }
+
+  .pencil-divider--lg .dot {
+    width: 12px;
+    height: 12px;
+  }
+
+  /* Sketch variant */
+  .divider-sketch {
+    position: relative;
+    width: 120px;
+    height: 40px;
+  }
+
+  .sketch-stroke {
+    position: absolute;
+    background: var(--color-black);
+    opacity: 0.4;
+    height: 2px;
+  }
+
+  .sketch-stroke-1 {
+    width: 60px;
+    top: 10px;
+    left: 0;
+    transform: rotate(-8deg);
+  }
+
+  .sketch-stroke-2 {
+    width: 40px;
+    top: 20px;
+    left: 50px;
+    transform: rotate(12deg);
+  }
+
+  .sketch-stroke-3 {
+    width: 35px;
+    top: 30px;
+    left: 20px;
+    transform: rotate(-5deg);
+  }
+
+  .pencil-divider--sm .divider-sketch {
+    width: 80px;
+    height: 30px;
+  }
+
+  .pencil-divider--sm .sketch-stroke-1 {
+    width: 40px;
+  }
+
+  .pencil-divider--sm .sketch-stroke-2 {
+    width: 25px;
+    left: 35px;
+  }
+
+  .pencil-divider--sm .sketch-stroke-3 {
+    width: 20px;
+  }
+
+  .pencil-divider--lg .divider-sketch {
+    width: 160px;
+    height: 50px;
+  }
+
+  .pencil-divider--lg .sketch-stroke-1 {
+    width: 80px;
+  }
+
+  .pencil-divider--lg .sketch-stroke-2 {
+    width: 55px;
+    left: 70px;
+  }
+
+  .pencil-divider--lg .sketch-stroke-3 {
+    width: 45px;
+  }
+
+  @keyframes dotPulse {
+    0%, 100% {
+      opacity: 0.6;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.2);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .dot {
+      animation: none;
+    }
+  }
+</style>

@@ -1,0 +1,257 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Gallery from '../../components/Gallery.astro';
+
+// Importar todas las obras
+const allObras = await Astro.glob('../../content/obras/*.md');
+const obrasData = allObras.map(obra => ({
+  slug: obra.frontmatter.slug,
+  title: obra.frontmatter.title,
+  image: obra.frontmatter.image,
+  alt: obra.frontmatter.alt,
+  technique: obra.frontmatter.technique,
+  date: obra.frontmatter.date,
+  summary: obra.frontmatter.summary
+})).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+// JSON-LD para la página de obras
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "Obras - Ana Paula Barahona",
+  "description": "Colección de obras de arte de Ana Paula Barahona",
+  "url": "https://anapaulabarahona.com/obras",
+  "mainEntity": {
+    "@type": "ItemList",
+    "numberOfItems": obrasData.length,
+    "itemListElement": obrasData.map((obra, index) => ({
+      "@type": "CreativeWork",
+      "position": index + 1,
+      "name": obra.title,
+      "description": obra.summary,
+      "creator": {
+        "@type": "Person",
+        "name": "Ana Paula Barahona"
+      },
+      "dateCreated": obra.date,
+      "artMedium": obra.technique,
+      "url": `https://anapaulabarahona.com/obras/${obra.slug}`
+    }))
+  }
+};
+---
+
+<BaseLayout
+  title="Obras - Ana Paula Barahona"
+  description="Explora la colección de obras de Ana Paula Barahona. Dibujos en grafito, carboncillo, tinta china y técnicas tradicionales."
+  canonical="https://anapaulabarahona.com/obras"
+  jsonLd={jsonLd}
+>
+  <nav aria-label="Navegación de migas" class="breadcrumb">
+    <ol>
+      <li><a href="/">Inicio</a></li>
+      <li aria-current="page">Obras</li>
+    </ol>
+  </nav>
+
+  <section class="page-header">
+    <h1>¡Mi Galería de Creaciones!</h1>
+    <p class="page-description">
+      ¡Bienvenidos a MY WORLD! Aquí encontrarás todas mis aventuras,
+      cada una con su propia historia. Si ves que algo no te gusta, no lo mires y si hay alguna cosa que te gusta de dejo el enlace a su post en instagram para que le des un like.
+    </p>
+  </section>
+
+  <Gallery obras={obrasData} featured={false} />
+
+  <section class="obras-info">
+    <div class="info-grid">
+      <div class="info-card">
+        <h2>Técnicas principales</h2>
+        <ul>
+          <li>Modelado en arcilla (lo que más me gusta)</li>
+          <li>Acrílico con espátula o pincel</li>
+          <li>Carboncillo, lapiz y plumilla (mi favo)</li>
+          <li>Técnicas mixtas osea mezcolanzas</li>
+          <li>Dibujo/ilustración digital</li>
+          <li>Murales</li>
+          <li>Lo que se me presente por delante</li>
+        </ul>
+      </div>
+      <div class="info-card">
+        <h2>Temáticas</h2>
+        <ul>
+          <li>Retrato y figura humana</li>
+          <li>Frikeces todas las que sean</li>
+          <li>Medievaladas</li>
+          <li>Lo que me pidan y lo que me salga</li>
+        </ul>
+      </div>
+      <div class="info-card">
+        <h2>Sobre mi proceso</h2>
+        <p>Cada obra para mí es un viaje de exploración personal. Disfruto experimentando con las técnicas para encontrar la expresión perfecta.</p>
+        <a href="/sobre" class="contact-cta">Conocer más</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .breadcrumb {
+    margin-bottom: var(--space-4);
+  }
+
+  .breadcrumb ol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: var(--space-1);
+    font-size: 0.9rem;
+  }
+
+  .breadcrumb li::after {
+    content: ' / ';
+    color: var(--color-gray);
+    margin-left: var(--space-1);
+  }
+
+  .breadcrumb li:last-child::after {
+    display: none;
+  }
+
+  .breadcrumb a {
+    color: var(--color-black);
+    text-decoration: none;
+  }
+
+  .breadcrumb a:hover {
+    text-decoration: underline;
+  }
+
+  .breadcrumb li[aria-current="page"] {
+    color: var(--color-gray);
+  }
+
+  .page-header {
+    text-align: center;
+    margin-bottom: var(--space-8);
+  }
+
+  .page-header h1 {
+    font-family: var(--font-family-display);
+    font-size: 3rem;
+    margin: 0 0 var(--space-3) 0;
+    position: relative;
+  }
+
+  .page-header h1::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 3px;
+    background: var(--color-black);
+  }
+
+  .page-description {
+    max-width: 600px;
+    margin: 0 auto;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: var(--color-gray);
+  }
+
+  .obras-info {
+    margin-top: var(--space-10);
+    padding: var(--space-8) 0;
+    background: var(--color-gray-light);
+  }
+
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--space-4);
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .info-card {
+    background: var(--color-white);
+    padding: var(--space-4);
+    border-radius: var(--border-radius);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+
+  .info-card h2 {
+    font-family: var(--font-family-display);
+    font-size: 1.3rem;
+    margin: 0 0 var(--space-3) 0;
+    color: var(--color-black);
+  }
+
+  .info-card ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .info-card li {
+    padding: var(--space-1) 0;
+    border-bottom: 1px solid #f0f0f0;
+    position: relative;
+    padding-left: var(--space-3);
+  }
+
+  .info-card li:last-child {
+    border-bottom: none;
+  }
+
+  .info-card li::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: var(--color-black);
+    font-weight: bold;
+  }
+
+  .info-card p {
+    margin: 0 0 var(--space-3) 0;
+    line-height: 1.5;
+    color: var(--color-gray);
+  }
+
+  .contact-cta {
+    display: inline-block;
+    padding: var(--space-2) var(--space-3);
+    background: var(--color-black);
+    color: var(--color-white);
+    text-decoration: none;
+    border-radius: var(--border-radius);
+    transition: var(--transition);
+    font-weight: 500;
+  }
+
+  .contact-cta:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  }
+
+  @media (max-width: 768px) {
+    .page-header h1 {
+      font-size: 2.5rem;
+    }
+
+    .info-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .contact-cta:hover {
+      transform: none;
+    }
+  }
+</style>
