@@ -1,0 +1,289 @@
+---
+import AstroSlider from './AstroSlider.astro';
+
+export interface Props {
+    id?: string;
+    images?: string[];
+}
+
+const {images = [], id = ''} = Astro.props as Props;
+
+// Convert string array to Slide objects for AstroSlider
+const slides = images.map(src => ({src}));
+---
+
+<section class="obra-gallery" aria-label="Galería de la obra">
+    <div class="gallery-grid">
+        {images.map((src) => (
+                <button type="button" class="gallery-item" data-dialog={id} data-src={src} aria-label={`Abrir ${src}`}>
+                    <img src={src} alt="" loading="lazy"/>
+                </button>
+        ))}
+    </div>
+
+    <dialog id={id} class="obra-lightbox">
+        <div class="lightbox-inner">
+            <button class="lightbox-close" aria-label="Cerrar">×</button>
+            <AstroSlider images={slides} showDots={true} showArrows={true} loop={true}/>
+        </div>
+    </dialog>
+</section>
+
+<style>
+    .obra-gallery {
+        margin: var(--space-1) 0;
+        width: calc(100% - var(--space-6));
+        max-width: 1000px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 0 var(--space-3);
+    }
+
+    .gallery-heading {
+        font-family: var(--font-family-display);
+        font-size: 1.4rem;
+        margin: 0 0 var(--space-4) 0;
+        text-align: center;
+    }
+
+    .gallery-grid {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        gap: var(--space-3);
+    }
+
+    .gallery-item {
+        display: block;
+        padding: 0;
+        border: none;
+        background: none;
+        cursor: pointer;
+        border-radius: 8px;
+        overflow: hidden;
+
+    }
+
+    .gallery-item img {
+        width: 100%;
+        height: 180px;
+        aspect-ratio: 1/1;
+        object-fit: cover;
+        display: block;
+        transition: transform 200ms ease;
+    }
+
+    .gallery-item:hover img {
+        transform: scale(1.03);
+    }
+
+    .obra-lightbox {
+        border: none;
+        padding: 0;
+        background: rgba(0, 0, 0, 0.8);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 9999;
+    }
+
+    .obra-lightbox[open] {
+        display: flex;
+    }
+
+    .lightbox-inner {
+        position: relative;
+        max-width: 90vw;
+        max-height: 90vh;
+        padding: var(--space-4);
+    }
+
+
+    .lightbox-close {
+        position: absolute;
+        top: -10px;
+        right: -10px;
+        background: var(--color-white);
+        border: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        font-size: 1.2rem;
+        cursor: pointer;
+        z-index: 1000;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    @media (max-width: 480px) {
+        .gallery-item {
+            width: 100%;
+            max-width: 100%;
+        }
+
+        .gallery-item img {
+            height: 100px;
+            width: 100%;
+            max-width: 100%;
+        }
+
+        .gallery-grid {
+            flex-direction: column;
+            gap: var(--space-2);
+        }
+    }
+</style>
+
+<script>
+    /**
+     * ObraGalleryManager - Manages gallery interactions and dialog display
+     */
+    class ObraGalleryManager {
+        private galleryItems: NodeListOf<Element>;
+        private isInitialized: boolean = false;
+
+        constructor() {
+            this.galleryItems = document.querySelectorAll('.gallery-item');
+            this.init();
+        }
+
+        /**
+         * Initialize the gallery manager
+         */
+        private init(): void {
+            if (this.isInitialized) return;
+            
+            this.bindGalleryItemEvents();
+            this.bindCloseEvents();
+            this.bindKeyboardEvents();
+            
+            this.isInitialized = true;
+        }
+
+        /**
+         * Bind click events to gallery items
+         */
+        private bindGalleryItemEvents(): void {
+            this.galleryItems.forEach((btn) => {
+                btn.addEventListener('click', (e) => this.handleGalleryItemClick(e));
+            });
+        }
+
+        /**
+         * Handle gallery item click
+         */
+        private handleGalleryItemClick(e: Event): void {
+            const btn = e.currentTarget as Element;
+            const dialogId = btn.getAttribute('data-dialog') as string | null;
+            const src = btn.getAttribute('data-src') as string | null;
+            
+            if (!dialogId || !src) return;
+            
+            this.openDialog(dialogId, src);
+        }
+
+        /**
+         * Open dialog with specified ID and source
+         */
+        private openDialog(dialogId: string, src: string): void {
+            const dialog = document.getElementById(dialogId) as HTMLDialogElement | null;
+            
+            if (dialog && typeof (dialog as any).showModal === 'function') {
+                try {
+                    (dialog as any).showModal();
+                } catch (e) {
+                    window.open(src, '_blank');
+                }
+            } else {
+                window.open(src, '_blank');
+            }
+        }
+
+        /**
+         * Close dialog safely
+         */
+        private closeDialog(dialog: HTMLDialogElement): void {
+            if (dialog && typeof (dialog as any).close === 'function') {
+                try {
+                    (dialog as any).close();
+                } catch (e) { /* ignore */ }
+            }
+        }
+
+        /**
+         * Bind close button and backdrop click events
+         */
+        private bindCloseEvents(): void {
+            // Close button - use event delegation
+            document.addEventListener('click', (e) => {
+                const target = e.target as HTMLElement;
+                
+                if (target.classList.contains('lightbox-close')) {
+                    const dialog = target.closest('dialog') as HTMLDialogElement | null;
+                    if (dialog) this.closeDialog(dialog);
+                }
+
+                // Close on backdrop click
+                if (target.classList.contains('obra-lightbox')) {
+                    this.closeDialog(target as HTMLDialogElement);
+                }
+            });
+        }
+
+        /**
+         * Bind keyboard events (Escape key)
+         */
+        private bindKeyboardEvents(): void {
+            document.addEventListener('keydown', (e) => {
+                if ((e as KeyboardEvent).key === 'Escape') {
+                    const openDialog = document.querySelector('dialog[open].obra-lightbox') as HTMLDialogElement | null;
+                    if (openDialog) this.closeDialog(openDialog);
+                }
+            });
+        }
+
+        /**
+         * Get current gallery items count
+         */
+        public getGalleryItemsCount(): number {
+            return this.galleryItems.length;
+        }
+
+        /**
+         * Reinitialize if needed (for dynamic content)
+         */
+        public refresh(): void {
+            this.galleryItems = document.querySelectorAll('.gallery-item');
+            this.bindGalleryItemEvents();
+        }
+    }
+
+    // Initialize gallery manager when DOM is ready
+    document.addEventListener('DOMContentLoaded', () => {
+        new ObraGalleryManager();
+    });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

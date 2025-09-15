@@ -1,0 +1,313 @@
+---
+export interface Slide {
+    src: string;
+    alt?: string;
+    caption?: string;
+    href?: string;
+}
+
+interface Props {
+    images: Slide[];
+    id?: string; // Optional unique identifier for the slider instance
+    autoplay?: boolean;
+    interval?: number; // ms
+    showDots?: boolean;
+    showArrows?: boolean;
+    loop?: boolean;
+    class?: string;
+}
+
+const {
+    images = [],
+    id,
+    autoplay = false,
+    interval = 5000,
+    showDots = true,
+    showArrows = true,
+    loop = true,
+    class: className = ''
+} = Astro.props as Props;
+
+// Use provided id or generate a random unique identifier
+const sliderId = id || `slider-${Math.random().toString(36).slice(2, 9)}`;
+---
+<section id={sliderId} class={`apb-slider ${className}`} role="region" aria-roledescription="carousel"
+         aria-label="Image slider" aria-live="polite">
+    <div class="apb-slider__viewport">
+        <ul class="apb-slider__track" style={`--count:${images.length};`}>
+            {images.map((img, i) => (
+                    <li class="apb-slide" aria-roledescription="slide" aria-label={`Slide ${i + 1} of ${images.length}`}
+                        data-index={i}>
+                        {img.href ? (
+                                <a href={img.href} class="apb-slide__link" tabindex="-1">
+                                    <img src={img.src} alt={img.alt ?? ''} loading="lazy"/>
+                                </a>
+                        ) : (
+                                <img src={img.src} alt={img.alt ?? ''} loading="lazy"/>
+                        )}
+                        {img.caption &&
+                                <figcaption class="apb-slide__caption">{img.caption}</figcaption>}
+                    </li>
+            ))}
+        </ul>
+    </div>
+
+    {showArrows && (
+            <div class="apb-slider__arrows">
+                <button class="apb-btn apb-btn--prev" aria-label="Previous slide" type="button">‹</button>
+                <button class="apb-btn apb-btn--next" aria-label="Next slide" type="button">›</button>
+            </div>
+    )}
+
+    {showDots && (
+            <div class="apb-slider__dots" role="tablist" aria-label="Slide dots">
+                {images.map((_, i) => (
+                        <button class="apb-dot" role="tab" aria-controls={`${sliderId}-slide-${i}`}
+                                aria-label={`Go to slide ${i + 1}`} data-index={i}/>
+                ))}
+            </div>
+    )}
+</section>
+
+<style>
+    .apb-slider {
+        position: relative;
+        width: 100%;
+        max-width: 100%;
+        user-select: none;
+    }
+
+    .apb-slider__viewport {
+        overflow: hidden;
+        border-radius: 12px;
+    }
+
+    .apb-slider__track {
+        display: flex;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        transition: transform .45s ease;
+        width: 72svw;
+        height: 69svh;
+        align-items: center;
+    }
+
+    .apb-slide {
+        position: relative;
+        min-width: 100%;
+        flex: 0 0 100%;
+    }
+
+    .apb-slide img {
+        display: block;
+        width: 100%;
+        height: auto;
+    }
+
+    .apb-slide__caption {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        padding: .75rem 1rem;
+        background: linear-gradient(to top, rgba(0, 0, 0, .55), rgba(0, 0, 0, 0));
+        color: #fff;
+        font-size: .95rem;
+    }
+
+    .apb-slider__arrows {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        pointer-events: none;
+    }
+
+    .apb-btn {
+        pointer-events: auto;
+        appearance: none;
+        border: none;
+        background: rgba(0, 0, 0, .35);
+        color: #fff;
+        width: 40px;
+        height: 40px;
+        border-radius: 999px;
+        display: grid;
+        place-items: center;
+        font-size: 22px;
+        line-height: 1;
+        cursor: pointer;
+        transition: background .2s ease;
+    }
+
+    .apb-btn:hover {
+        background: rgba(0, 0, 0, .5);
+    }
+
+    .apb-slider__dots {
+        display: flex;
+        gap: .5rem;
+        justify-content: center;
+        margin-top: .75rem;
+    }
+
+    .apb-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 999px;
+        border: none;
+        background: #d0d0d0;
+        cursor: pointer;
+        padding: 0;
+    }
+
+    .apb-dot[aria-selected="true"], .apb-dot.is-active {
+        background: #111;
+    }
+
+    /* Reduce motion respect */
+    @media (prefers-reduced-motion: reduce) {
+        .apb-slider__track {
+            transition: none;
+        }
+    }
+</style>
+
+<script define:vars={{sliderId}}>
+    // ID-based slider implementation for multiple instances
+    (() => {
+        let currentIndex = 0;
+        let slideCount = 0;
+        let track = null;
+        let dots = [];
+        let prevBtn = null;
+        let nextBtn = null;
+        let slider = null;
+
+        function initSlider() {
+            // Find the specific slider instance by its unique ID
+            slider = document.getElementById(sliderId);
+            if (!slider) return false;
+
+            // Check if already initialized
+            if (slider.hasAttribute('data-initialized')) return false;
+
+            // Mark as initialized
+            slider.setAttribute('data-initialized', 'true');
+
+            // Get elements
+            track = slider.querySelector('.apb-slider__track');
+            dots = Array.from(slider.querySelectorAll('.apb-dot'));
+            prevBtn = slider.querySelector('.apb-btn--prev');
+            nextBtn = slider.querySelector('.apb-btn--next');
+            slideCount = slider.querySelectorAll('.apb-slide').length;
+
+            if (!track || slideCount === 0) return false;
+
+            // Bind events
+            bindEvents();
+            
+            // Initialize to first slide
+            goToSlide(0);
+            
+            console.log('✅ AstroSlider initialized with', slideCount, 'slides');
+            return true;
+        }
+
+        function goToSlide(index) {
+            if (!track) return;
+            
+            // Ensure index is within bounds
+            if (index < 0) index = slideCount - 1;
+            if (index >= slideCount) index = 0;
+            
+            currentIndex = index;
+            
+            // Move track
+            const offset = -index * 100;
+            track.style.transform = `translateX(${offset}%)`;
+            
+            // Update dots
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('is-active', i === index);
+                dot.setAttribute('aria-selected', String(i === index));
+            });
+        }
+
+        function nextSlide() {
+            goToSlide(currentIndex + 1);
+        }
+
+        function prevSlide() {
+            goToSlide(currentIndex - 1);
+        }
+
+        function bindEvents() {
+            // Navigation buttons
+            if (prevBtn) {
+                prevBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    prevSlide();
+                });
+            }
+
+            if (nextBtn) {
+                nextBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    nextSlide();
+                });
+            }
+
+            // Dots
+            dots.forEach((dot, i) => {
+                dot.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    goToSlide(i);
+                });
+            });
+
+            // Keyboard navigation
+            if (slider) {
+                slider.addEventListener('keydown', (e) => {
+                    if (e.key === 'ArrowLeft') {
+                        e.preventDefault();
+                        prevSlide();
+                    } else if (e.key === 'ArrowRight') {
+                        e.preventDefault();
+                        nextSlide();
+                    }
+                });
+                slider.tabIndex = 0;
+            }
+        }
+
+        // Try to initialize immediately
+        if (!initSlider()) {
+            // If failed, wait for dialog to open
+            const observer = new MutationObserver((mutations) => {
+                mutations.forEach((mutation) => {
+                    if (mutation.type === 'attributes' && mutation.attributeName === 'open') {
+                        const dialog = mutation.target;
+                        if (dialog.open) {
+                            setTimeout(() => {
+                                if (initSlider()) {
+                                    observer.disconnect();
+                                }
+                            }, 100);
+                        }
+                    }
+                });
+            });
+
+            // Observe dialogs
+            document.addEventListener('DOMContentLoaded', () => {
+                const dialogs = document.querySelectorAll('dialog');
+                dialogs.forEach(dialog => {
+                    observer.observe(dialog, { attributes: true, attributeFilter: ['open'] });
+                });
+            });
+        }
+    })();
+</script>
